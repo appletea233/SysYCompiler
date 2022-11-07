@@ -1,0 +1,298 @@
+.data
+str_0: .asciiz "result is "
+str_1: .asciiz "."
+.text
+li $fp, 0x10040000
+addi $fp, $fp, 96
+
+j func_main
+nop
+
+
+# totalMem: 12 localMem: 0 tmpMem: 4 paraMem: 8
+func_sum:
+# @tmp_0 = x + y
+lw $t1, -8($fp)
+lw $t2, -4($fp)
+add $t0, $t1, $t2
+sw $t0, -12($fp)
+
+lw $v0, -12($fp)
+jr $ra
+
+# totalMem: 12 localMem: 0 tmpMem: 4 paraMem: 8
+func_difference:
+# @tmp_1 = x - y
+lw $t1, -8($fp)
+lw $t2, -4($fp)
+sub $t0, $t1, $t2
+sw $t0, -12($fp)
+
+lw $v0, -12($fp)
+jr $ra
+
+# totalMem: 12 localMem: 0 tmpMem: 4 paraMem: 8
+func_product:
+# @tmp_2 = x * y
+lw $t1, -8($fp)
+lw $t2, -4($fp)
+mult $t1, $t2
+mflo $t0
+sw $t0, -12($fp)
+
+lw $v0, -12($fp)
+jr $ra
+
+# totalMem: 12 localMem: 0 tmpMem: 4 paraMem: 8
+func_div:
+# @tmp_3 = x / y
+lw $t1, -8($fp)
+lw $t2, -4($fp)
+div $t1, $t2
+mflo $t0
+sw $t0, -12($fp)
+
+lw $v0, -12($fp)
+jr $ra
+
+# totalMem: 96 localMem: 24 tmpMem: 72 paraMem: 0
+func_main:
+# var int result_1_5 = 0
+li $t0, 0
+sw $t0, -76($fp)
+# a_1_0 = GETINT
+li $v0, 5
+syscall
+sw $v0, -96($fp)
+# b_1_1 = GETINT
+li $v0, 5
+syscall
+sw $v0, -92($fp)
+# c_1_2 = GETINT
+li $v0, 5
+syscall
+sw $v0, -88($fp)
+# d_1_3 = GETINT
+li $v0, 5
+syscall
+sw $v0, -84($fp)
+# e_1_4 = GETINT
+li $v0, 5
+syscall
+sw $v0, -80($fp)
+# @tmp_4 = 0 - e_1_4
+li $t1, 0
+lw $t2, -80($fp)
+sub $t0, $t1, $t2
+sw $t0, -72($fp)
+
+# @tmp_6 = c_1_2 * d_1_3
+lw $t1, -88($fp)
+lw $t2, -84($fp)
+mult $t1, $t2
+mflo $t0
+sw $t0, -68($fp)
+
+# @tmp_5 = @tmp_4 + @tmp_6
+lw $t1, -72($fp)
+lw $t2, -68($fp)
+add $t0, $t1, $t2
+sw $t0, -64($fp)
+
+# @tmp_8 = a_1_0 % b_1_1
+lw $t1, -96($fp)
+lw $t2, -92($fp)
+div $t1, $t2
+mfhi $t0
+sw $t0, -60($fp)
+
+# @tmp_7 = @tmp_5 - @tmp_8
+lw $t1, -64($fp)
+lw $t2, -60($fp)
+sub $t0, $t1, $t2
+sw $t0, -56($fp)
+
+# @tmp_11 = a_1_0 + b_1_1
+lw $t1, -96($fp)
+lw $t2, -92($fp)
+add $t0, $t1, $t2
+sw $t0, -52($fp)
+
+# @tmp_10 = c_1_2 / @tmp_11
+lw $t1, -88($fp)
+lw $t2, -52($fp)
+div $t1, $t2
+mflo $t0
+sw $t0, -48($fp)
+
+# @tmp_9 = @tmp_7 + @tmp_10
+lw $t1, -56($fp)
+lw $t2, -48($fp)
+add $t0, $t1, $t2
+sw $t0, -44($fp)
+
+# pushCode
+lw $t0, -96($fp)
+sw $t0, 4($fp)
+# pushCode
+lw $t0, -92($fp)
+sw $t0, 8($fp)
+# func_sum call
+addi $sp, $sp, -16
+sw $ra, 0($sp)
+sw $t0, 4($sp)
+sw $t1, 8($sp)
+sw $t2, 12($sp)
+
+addi $fp, $fp, 12
+jal func_sum
+nop
+nop
+addi $fp, $fp, -12
+
+lw $ra, 0($sp)
+lw $t0, 4($sp)
+lw $t1, 8($sp)
+lw $t2, 12($sp)
+addi $sp, $sp, 16
+# @tmp_13 = RET
+sw $v0, -40($fp)
+# @tmp_12 = @tmp_9 + @tmp_13
+lw $t1, -44($fp)
+lw $t2, -40($fp)
+add $t0, $t1, $t2
+sw $t0, -36($fp)
+
+# pushCode
+lw $t0, -88($fp)
+sw $t0, 4($fp)
+# pushCode
+lw $t0, -84($fp)
+sw $t0, 8($fp)
+# func_difference call
+addi $sp, $sp, -16
+sw $ra, 0($sp)
+sw $t0, 4($sp)
+sw $t1, 8($sp)
+sw $t2, 12($sp)
+
+addi $fp, $fp, 12
+jal func_difference
+nop
+nop
+addi $fp, $fp, -12
+
+lw $ra, 0($sp)
+lw $t0, 4($sp)
+lw $t1, 8($sp)
+lw $t2, 12($sp)
+addi $sp, $sp, 16
+# @tmp_15 = RET
+sw $v0, -32($fp)
+# pushCode
+lw $t0, -96($fp)
+sw $t0, 4($fp)
+# pushCode
+lw $t0, -92($fp)
+sw $t0, 8($fp)
+# func_product call
+addi $sp, $sp, -16
+sw $ra, 0($sp)
+sw $t0, 4($sp)
+sw $t1, 8($sp)
+sw $t2, 12($sp)
+
+addi $fp, $fp, 12
+jal func_product
+nop
+nop
+addi $fp, $fp, -12
+
+lw $ra, 0($sp)
+lw $t0, 4($sp)
+lw $t1, 8($sp)
+lw $t2, 12($sp)
+addi $sp, $sp, 16
+# @tmp_17 = RET
+sw $v0, -28($fp)
+# @tmp_16 = @tmp_15 * @tmp_17
+lw $t1, -32($fp)
+lw $t2, -28($fp)
+mult $t1, $t2
+mflo $t0
+sw $t0, -24($fp)
+
+# @tmp_14 = @tmp_12 - @tmp_16
+lw $t1, -36($fp)
+lw $t2, -24($fp)
+sub $t0, $t1, $t2
+sw $t0, -20($fp)
+
+# pushCode
+lw $t0, -96($fp)
+sw $t0, 4($fp)
+# pushCode
+lw $t0, -88($fp)
+sw $t0, 8($fp)
+# func_div call
+addi $sp, $sp, -16
+sw $ra, 0($sp)
+sw $t0, 4($sp)
+sw $t1, 8($sp)
+sw $t2, 12($sp)
+
+addi $fp, $fp, 12
+jal func_div
+nop
+nop
+addi $fp, $fp, -12
+
+lw $ra, 0($sp)
+lw $t0, 4($sp)
+lw $t1, 8($sp)
+lw $t2, 12($sp)
+addi $sp, $sp, 16
+# @tmp_19 = RET
+sw $v0, -16($fp)
+# @tmp_18 = @tmp_14 + @tmp_19
+lw $t1, -20($fp)
+lw $t2, -16($fp)
+add $t0, $t1, $t2
+sw $t0, -12($fp)
+
+# e_1_4 = @tmp_18
+lw $t1, -12($fp)
+li $t2, 0
+add $t0, $t1, $t2
+sw $t0, -80($fp)
+
+# @tmp_21 = e_1_4 * a_1_0
+lw $t1, -80($fp)
+lw $t2, -96($fp)
+mult $t1, $t2
+mflo $t0
+sw $t0, -8($fp)
+
+# @tmp_20 = result_1_5 + @tmp_21
+lw $t1, -76($fp)
+lw $t2, -8($fp)
+add $t0, $t1, $t2
+sw $t0, -4($fp)
+
+# result_1_5 = @tmp_20
+lw $t1, -4($fp)
+li $t2, 0
+add $t0, $t1, $t2
+sw $t0, -76($fp)
+
+la $a0, str_0
+li $v0, 4
+syscall
+lw $a0, -76($fp)
+li $v0, 1
+syscall
+la $a0, str_1
+li $v0, 4
+syscall
+li $v0, 10
+syscall

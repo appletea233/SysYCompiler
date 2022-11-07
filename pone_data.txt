@@ -1,0 +1,185 @@
+
+const int A_GLOBAL = 1;
+
+const int B_GLOBAL = 2, C_GLOBAL = 3;
+const int D_GLOBAL = 4, E_GLOBAL = 5, F_GLOBAL = 6;
+
+
+const int Arr1_1_GLOBAL[5] = {1, 2, 3, 4, 5};
+
+const int Arr2_1_GLOBAL[3][2] = {{1,2},{3,4},{5,6}};
+
+int a_glogal;
+
+int arr1_1_global[5] = {1, 2, 3, 4, 5};
+
+int arr2_1_global[3][2] = {{1,2},{3,4},{5,6}};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int func_params(int a, int b[], int c[][2])
+{
+    
+    int d = a*2 + b[0] % 2 + c[0][0] % 3;
+    
+    a_glogal = d * (a + 2);
+    
+    ;
+
+    if (a_glogal < 50) {
+        printf("Now a_global is %d, it is < 50.\n", a_glogal);
+    } else if (a_glogal == 50) {
+        printf("Now a_global is exactly 50!!!.\n");
+    } else {
+        printf("Now a_global is %d, it is > 50.\n", a_glogal);
+    }
+    return 0;
+}
+
+int func2_params(int a, int b, int c)
+{
+    int res = 6 * (a + b + c)  / 2 - 2;
+    printf("I am a function with 3 param: {{ %d, %d, %d }} and I return %d.\n", a, b, c, res);
+    return res;
+}
+
+
+
+void func3_params(int a)
+{
+    printf("I am a function with only one param: {{ %d }} and I return noting.\n", a);
+    return;
+}
+
+void func4_params(int a, int b)
+{
+    printf("I am a function with 2 param: {{ %d, %d }} and I return noting.\n", a, b);
+    return;
+}
+
+int func_no_params()
+{
+    printf("I am a function without params and I return 0.\n");
+    return 0;
+}
+
+
+void func2_no_params()
+{
+}
+
+
+
+
+int main()
+{
+    int main_var_a, main_var_b, main_var_c;
+    
+    main_var_a = getint();
+    main_var_b = getint();
+
+    
+    printf("19241091\n");
+    
+    printf("A_GLOBAL = %d\n", A_GLOBAL);
+
+    func3_params(C_GLOBAL);
+    func4_params(A_GLOBAL, B_GLOBAL);
+
+    func_no_params();
+    func2_no_params();
+
+    
+    arr1_1_global[1] = 2;   
+    arr1_1_global[4] = C_GLOBAL;    
+    arr1_1_global[2] = Arr1_1_GLOBAL[3];    
+    arr2_1_global[1][1] = Arr2_1_GLOBAL[1][1]; 
+
+    arr2_1_global[1][1] = (arr1_1_global[1] * 2);   
+    printf("arr2_1_global[1][1] is %d\n", arr2_1_global[1][1]);
+
+    func_params(A_GLOBAL, arr1_1_global, arr2_1_global);
+
+    
+    
+    main_var_c = func2_params(B_GLOBAL, arr1_1_global[1], arr2_1_global[1][1]);
+    printf("Now main_var_c is %d\n", main_var_c);
+
+    if ( main_var_a % 7 != 0 && main_var_b % 7 != 0 ) {
+        
+        
+        
+
+        while (!main_var_a) {
+            main_var_a = main_var_a + main_var_b;
+            if (main_var_a % 7 == 0 || main_var_a > 100) {
+                break;
+            } else {
+                continue;
+            }
+        }
+    }
+
+    if (main_var_a >= 30) {
+        printf("Now main_var_a is %d, it is >= 30\n", main_var_a);
+    } else if (main_var_a <= 10) {
+        printf("Now main_var_a is %d, it is <= 10\n", main_var_a);
+    } else {
+        printf("Now main_var_a is %d, it is > 10 and < 30\n", main_var_a);
+    }
+
+    main_var_a = -main_var_a;
+    main_var_b = +main_var_b;
+
+    printf("==================testfile1 end==================");
+
+    return 0;
+}
+   
