@@ -1,25 +1,11 @@
-int sum(int x,int y){  //sum
-    return x+y;
-}
-int difference(int x,int y){
-    return x-y;//minus
-}
-int product(int x,int y){   //multi
-    return (x*y);
-}
-int div(int x,int y)
-{
-    return x/y; //div
-}
+const int xx[2] = { 1, 2 };
+
 int main(){
-    int a,b,c,d,e,result=0;
-    a=getint();
-    b=getint();
-    c=getint();
-    d=getint();
-    e=getint();
-    e=-e+c*d-a%b+c/(a+b)+sum(a,b)-difference(c,d)*product(a,b)+div(a,c);
-    result=result+e*a;
-    printf("result is %d.",result);
-    return 0;
+int c = 1;
+int d = 2
+    int a[2][2] = {{c+d,2},{3,4}};
+    int b[2][2];
+
+    c = a + 2;
+    d = c[1];
 }

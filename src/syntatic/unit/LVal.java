@@ -2,16 +2,20 @@ package syntatic.unit;
 
 import base.BaseUnit;
 import base.Var;
+import base.VarTable;
+import middleCode.unit.ExpCode;
 import syntatic.SynUnit;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.Objects;
+import java.util.Vector;
 
 import static base.Type.*;
 
 public class LVal extends SynUnit {
     int dim = 0;
     int line = 0;
+    Vector<Var> varVector = new Vector<>();
     String name;
 
     public LVal(BaseUnit baseUnit) {
@@ -59,17 +63,31 @@ public class LVal extends SynUnit {
 
     public void getValue(){
         reset();
-        System.out.println(LVAL + ": isConst "+isConst);
         if (isConst || isGlobal) {
             checkChild(IDENFR);
             value = var.value;
             System.out.println(LVAL+": "+var);
             // 常量函数赋值
             // TODO 数组常量的存取
+            while(isChildMatch(LBRACK)){
+                checkChild(LBRACK);
+                createChildTable(EXP);
+                checkChild(RBRACK);
+            }
         }
     }
 
     public void genMiddleCode(){
-        returnVar = var;
+        if (dim == 0){
+            if (var.dim == 0){
+                returnVar = var;
+            }
+            else{
+                returnVar = VarTable.getTmpVar();
+            }
+        }
+        else {
+
+        }
     }
 }

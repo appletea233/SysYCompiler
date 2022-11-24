@@ -30,12 +30,10 @@ public class Exp extends SynUnit {
     public void getValue() {
         reset();
 
-//        if (isConst || isGlobal) {
-            getChildValue(ADDEXP);
-            value = ((AddExp) childUnit).value;
+        getChildValue(ADDEXP);
+        value = ((AddExp) childUnit).value;
         System.out.println("Exp ReturnExp "+returnVar);
 
-//        }
     }
 
     public void genMiddleCode(){

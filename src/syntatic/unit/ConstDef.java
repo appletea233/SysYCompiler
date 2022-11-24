@@ -61,6 +61,9 @@ public class ConstDef extends SynUnit {
             errorList.addError(line, 'b');
 
         checkChild(ASSIGN);
+        childUnit = getChildNow();
+        childUnit.var = var;
+        System.out.println(var);
         createChildTable(CONSTINITVAL);
         varTable.addVar(var);
     }
@@ -73,6 +76,7 @@ public class ConstDef extends SynUnit {
         while(isChildMatch(LBRACK)){
             checkChild(LBRACK);
             getChildValue(CONSTEXP);
+            var.arrayDim.add(childUnit.value);
             checkChild(RBRACK);
         }
 
@@ -83,7 +87,6 @@ public class ConstDef extends SynUnit {
 
         if (var.dim == 0){
             var.value = childUnit.value;
-            System.out.println("---------------const:" + var);
         }
     }
 
@@ -93,7 +96,11 @@ public class ConstDef extends SynUnit {
     }
 
     public void genMiddleCode(){
-        middleCodeList.addCode(new ConstDefCode(var.name, var.value));
+        if (var.dim == 0)
+            middleCodeList.addCode(new ConstDefCode(var.name, var.value));
+        else{
+            middleCodeList.addCode(new ConstDefCode(var.name, var.arrayValue));
+        }
     }
 
 }

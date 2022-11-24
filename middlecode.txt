@@ -1,75 +1,11 @@
-const str_1 = "."
-const str_0 = "result is "
-
-int func_sum ()
-para int x
-para int y
-@tmp_0 = x + y
-ret @tmp_0
-
-int func_difference ()
-para int x
-para int y
-@tmp_1 = x - y
-ret @tmp_1
-
-int func_product ()
-para int x
-para int y
-@tmp_2 = x * y
-ret @tmp_2
-
-int func_div ()
-para int x
-para int y
-@tmp_3 = x / y
-ret @tmp_3
+array const int xx_0_0 1 2 
 
 int func_main ()
-var int a_1_0
-var int b_1_1
-var int c_1_2
-var int d_1_3
-var int e_1_4
-var int result_1_5 = 0
-a_1_0 = GETINT
-b_1_1 = GETINT
-c_1_2 = GETINT
-d_1_3 = GETINT
-e_1_4 = GETINT
-@tmp_4 = 0 - e_1_4
-@tmp_6 = c_1_2 * d_1_3
-@tmp_5 = @tmp_4 + @tmp_6
-@tmp_8 = a_1_0 % b_1_1
-@tmp_7 = @tmp_5 - @tmp_8
-@tmp_11 = a_1_0 + b_1_1
-@tmp_10 = c_1_2 / @tmp_11
-@tmp_9 = @tmp_7 + @tmp_10
-push a_1_0
-push b_1_1
-call func_sum
-@tmp_13 = RET
-@tmp_12 = @tmp_9 + @tmp_13
-push c_1_2
-push d_1_3
-call func_difference
-@tmp_15 = RET
-push a_1_0
-push b_1_1
-call func_product
-@tmp_17 = RET
-@tmp_16 = @tmp_15 * @tmp_17
-@tmp_14 = @tmp_12 - @tmp_16
-push a_1_0
-push c_1_2
-call func_div
-@tmp_19 = RET
-@tmp_18 = @tmp_14 + @tmp_19
-e_1_4 = @tmp_18
-@tmp_21 = e_1_4 * a_1_0
-@tmp_20 = result_1_5 + @tmp_21
-result_1_5 = @tmp_20
-print str_0
-print result_1_5
-print str_1
-ret 0
+var int c_1_1 = 1
+var int d_1_2 = 2
+@tmp_0 = c_1_1 + d_1_2
+array int a_1_3 2 2 = @tmp_0 2 3 4 
+array int b_1_4 2 2
+@tmp_1 = a_1_3 + 2
+c_1_1 = @tmp_1
+d_1_2 = c_1_1

@@ -129,7 +129,6 @@ public class Stmt extends SynUnit {
                 int idx_tmp = symbolList.idx;
                 treeList.setTreePush(false);
 
-
                 LVal lval = new LVal(this);
                 lval.construct();
 

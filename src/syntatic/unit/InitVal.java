@@ -1,13 +1,16 @@
 package syntatic.unit;
 
 import base.BaseUnit;
+import base.Var;
 import syntatic.SynUnit;
 
 import java.util.Objects;
+import java.util.Vector;
 
 import static base.Type.*;
 
 public class InitVal extends SynUnit {
+    public Vector<Var> returnVarList = new Vector<>();
     int dim = 0;
 
     public InitVal(BaseUnit baseUnit) {
@@ -48,9 +51,15 @@ public class InitVal extends SynUnit {
             if (isChildMatch(RBRACE))
                 checkChild(RBRACE);
             else{
+                InitVal initVal = (InitVal) getChildNow();
+                initVal.var = var;
+                initVal.returnVarList = this.returnVarList;
                 createChildTable(INITVAL);
                 while(isChildMatch(COMMA)){
                     checkChild(COMMA);
+                    initVal = (InitVal) getChildNow();
+                    initVal.var = var;
+                    initVal.returnVarList = this.returnVarList;
                     createChildTable(INITVAL);
                 }
                 checkChild(RBRACE);
@@ -63,7 +72,8 @@ public class InitVal extends SynUnit {
         if (isChildMatch(EXP)){
             getChildValue("Exp");
             value = childUnit.value;
-            System.out.println("init "+value);
+            System.out.println(var);
+            this.var.arrayValue.add(value);
         }
         else if (isChildMatch(LBRACE)){
             checkChild(LBRACE);
@@ -81,15 +91,33 @@ public class InitVal extends SynUnit {
     }
 
     public void genMiddleCode(){
-        System.out.println(this.isConst);
-
         reset();
         var = parent.var;
-
+        System.out.println("genmiddle var: " + var);
         if (var.dim == 0){
             genChildMiddleCode(EXP);
             returnVar = childUnit.returnVar;
-            System.out.println("InitVal ExpReturn " + returnVar);
+            this.returnVarList.add(returnVar);
+        }
+        else{
+            if (isChildMatch(EXP)){
+                genChildMiddleCode(EXP);
+                returnVar = childUnit.returnVar;
+                this.returnVarList.add(returnVar);
+            }
+            else if (isChildMatch(LBRACE)){
+                checkChild(LBRACE);
+                if (isChildMatch(RBRACE))
+                    checkChild(RBRACE);
+                else{
+                    genChildMiddleCode(INITVAL);
+                    while(isChildMatch(COMMA)){
+                        checkChild(COMMA);
+                        genChildMiddleCode(INITVAL);
+                    }
+                    checkChild(RBRACE);
+                }
+            }
         }
     }
 }

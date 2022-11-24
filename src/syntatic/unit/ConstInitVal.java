@@ -43,14 +43,50 @@ public class ConstInitVal extends SynUnit {
         pushTree(this);
     }
 
+    public void createTable(){
+        reset();
+        if (isChildMatch(CONSTEXP)){
+            createChildTable(CONSTEXP);
+        }
+        else if (isChildMatch(LBRACE)){
+            checkChild(LBRACE);
+            if (isChildMatch(RBRACE))
+                checkChild(RBRACE);
+            else{
+                createChildTable(CONSTINITVAL);
+                childUnit.var = var;
+                while(isChildMatch(COMMA)){
+                    checkChild(COMMA);
+                    createChildTable(CONSTINITVAL);
+                    childUnit.var = var;
+                }
+                checkChild(RBRACE);
+            }
+        }
+        else{
+            System.out.println("const initival error...");
+        }
+    }
+
     public void getValue(){
         childIdx = 0;
         if (isChildMatch(CONSTEXP)){
             getChildValue(CONSTEXP);
             value = childUnit.value;
-
-//            System.out.println("Const Initial Value " + value);
+            this.var.arrayValue.add(value);
         }
-//        TODO 数组常量
+        else if (isChildMatch(LBRACE)){
+            checkChild(LBRACE);
+            if (isChildMatch(RBRACE))
+                checkChild(RBRACE);
+            else{
+                getChildValue(CONSTINITVAL);
+                while(isChildMatch(COMMA)){
+                    checkChild(COMMA);
+                    getChildValue(CONSTINITVAL);
+                }
+                checkChild(RBRACE);
+            }
+        }
     }
 }

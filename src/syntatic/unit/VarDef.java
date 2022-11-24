@@ -3,10 +3,12 @@ package syntatic.unit;
 import base.BaseUnit;
 import base.Var;
 import base.VarTable;
+import middleCode.unit.ArrayDefCode;
 import middleCode.unit.VarDefCode;
 import syntatic.SynUnit;
 
 import java.util.Objects;
+import java.util.Vector;
 
 import static base.Type.*;
 
@@ -15,6 +17,7 @@ public class VarDef extends SynUnit {
     String type = INTTK;
     int dim = 0;
     int line;
+    Vector<Var> initVarVector = new Vector<>();
 
     public VarDef(BaseUnit baseUnit) {
         super(baseUnit, "VarDef");
@@ -58,6 +61,11 @@ public class VarDef extends SynUnit {
             errorList.addError(line, 'b');
         if (isChildMatch(ASSIGN)) {
             checkChild(ASSIGN);
+            childUnit = getChildNow();
+            childUnit.var = var;
+
+            System.out.println(childUnit.name);
+            System.out.println(var);
             createChildTable(INITVAL);
         }
         varTable.addVar(var);
@@ -70,6 +78,7 @@ public class VarDef extends SynUnit {
         while(isChildMatch(LBRACK)){
             checkChild(LBRACK);
             getChildValue(CONSTEXP);
+            var.arrayDim.add(childUnit.value);
             checkChild(RBRACK);
         }
 
@@ -77,7 +86,8 @@ public class VarDef extends SynUnit {
             checkChild(ASSIGN);
             getChildValue(INITVAL);
             if (isGlobal){
-                var.value = childUnit.value;
+                if (var.dim == 0)
+                    var.value = childUnit.value;
             }
         }
 
@@ -96,12 +106,18 @@ public class VarDef extends SynUnit {
         }
 
         reset();
-        if (var.dim == 0){
-            checkChild(IDENFR);
-            if (isChildMatch(ASSIGN)) {
-                checkChild(ASSIGN);
-                genChildMiddleCode(INITVAL);
-                returnVar = childUnit.returnVar;
+        checkChild(IDENFR);
+        while(isChildMatch(LBRACK)){
+            checkChild(LBRACK);
+            genChildMiddleCode(CONSTEXP);
+            checkChild(RBRACK);
+        }
+        if (isChildMatch(ASSIGN)) {
+            checkChild(ASSIGN);
+            genChildMiddleCode(INITVAL);
+            this.returnVar = childUnit.returnVar;
+            this.initVarVector = ((InitVal)childUnit).returnVarList;
+            System.out.println("VAR DEF INITVAL" + initVarVector);
 //                System.out.println("VarDef ExpReturn " + returnVar);
 
 //                if (MiddleCodeList.currentCode!=null && MiddleCodeList.currentCode.cls.equals("ExpCode")){
@@ -113,16 +129,31 @@ public class VarDef extends SynUnit {
 //                else{
 //                    middleCodeList.addCode(new VarDefCode(var, returnVar));
 //                }
-                if (isGlobal) {
+            if (isGlobal) {
+                if (var.dim > 0) {
+                    middleCodeList.addCode(new ArrayDefCode(var, this.initVarVector));
+                }
+                else if (var.dim == 0) {
                     middleCodeList.addCode(new VarDefCode(var, new Var(returnVar.value)));
                 }
-                else
-                    middleCodeList.addCode(new VarDefCode(var, returnVar));
             }
-            else{
+            else {
+                if (var.dim > 0) {
+                    middleCodeList.addCode(new ArrayDefCode(var, this.initVarVector));
+                } else if (var.dim == 0) {
+                    middleCodeList.addCode(new VarDefCode(var, returnVar));
+                }
+            }
+        }
+        else{
+            if (var.dim > 0) {
+                middleCodeList.addCode(new ArrayDefCode(var));
+            }
+            else if (var.dim == 0) {
                 middleCodeList.addCode(new VarDefCode(var));
             }
         }
+
     }
 
 

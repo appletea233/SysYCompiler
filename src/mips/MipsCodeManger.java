@@ -1,8 +1,5 @@
 package mips;
 
-import base.Str;
-import middleCode.MiddleCode;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -123,18 +120,16 @@ public class MipsCodeManger {
 
         content = ".data\n";
         Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-        for (String code: dataSegment){
+        for (String code: dataSegment) {
             content = code + "\n";
             Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         }
-
 
         content = ".text\n";
         content += "li $fp, 0x10040000\n";
         content += String.format("addi $fp, $fp, %s\n\n", initStamp);
         content += "j func_main\n";
         content += "nop\n\n\n";
-
 
         Files.write(path, content.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
 

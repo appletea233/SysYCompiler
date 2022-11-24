@@ -1,5 +1,7 @@
 package base;
 
+import com.sun.glass.ui.Size;
+
 import java.util.Objects;
 import java.util.Vector;
 
@@ -14,6 +16,7 @@ public class Var {
     // const var
     public boolean isConst = false;
     public int value;
+    public Vector<Integer> arrayValue = new Vector<>();
     // tmp var
     public boolean isTmp = false;
     // mem
@@ -42,7 +45,6 @@ public class Var {
         this.type = type;
         this.dim = dim;
         this.line = line;
-//        System.out.println(this.toString());
 
         // mem
         if (dim == 0 && Objects.equals(type, "int")){
@@ -70,5 +72,15 @@ public class Var {
 
     public void addUsedLine(int line){
         this.usedLine.add(line);
+    }
+
+    public int getArraySize(){
+        int size = 1;
+        if (dim > 0){
+            for (int x: arrayDim){
+                size *= x;
+            }
+        }
+        return size;
     }
 }
