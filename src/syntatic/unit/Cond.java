@@ -13,4 +13,9 @@ public class Cond extends SynUnit {
         checkSynUnit("LOrExp");
         pushTree(this);
     }
+
+    public void genMiddleCode(String label1, String label2) {
+        LOrExp lOrExp = (LOrExp) getChildNow();
+        lOrExp.genMiddleCode(label1, label2);
+    }
 }

@@ -3,6 +3,7 @@ package syntatic.unit;
 import base.BaseUnit;
 import base.Var;
 import base.VarTable;
+import middleCode.unit.ArrayAssignCode;
 import middleCode.unit.ArrayDefCode;
 import middleCode.unit.VarDefCode;
 import syntatic.SynUnit;
@@ -118,31 +119,16 @@ public class VarDef extends SynUnit {
             this.returnVar = childUnit.returnVar;
             this.initVarVector = ((InitVal)childUnit).returnVarList;
             System.out.println("VAR DEF INITVAL" + initVarVector);
-//                System.out.println("VarDef ExpReturn " + returnVar);
 
-//                if (MiddleCodeList.currentCode!=null && MiddleCodeList.currentCode.cls.equals("ExpCode")){
-//                    ExpCode expCode = (ExpCode) (MiddleCodeList.currentCode);
-//                    if (expCode.varReturn.isTmp) {
-//                        expCode.varReturn = var;
-//                    }
-//                }
-//                else{
-//                    middleCodeList.addCode(new VarDefCode(var, returnVar));
-//                }
-            if (isGlobal) {
-                if (var.dim > 0) {
-                    middleCodeList.addCode(new ArrayDefCode(var, this.initVarVector));
-                }
-                else if (var.dim == 0) {
-                    middleCodeList.addCode(new VarDefCode(var, new Var(returnVar.value)));
+            // global or not global
+            if (var.dim > 0) {
+                middleCodeList.addCode(new ArrayDefCode(var));
+                for (int index = 0; index < initVarVector.size(); index++) {
+                    middleCodeList.addCode(new ArrayAssignCode(var, new Var(index), initVarVector.get(index)));
                 }
             }
-            else {
-                if (var.dim > 0) {
-                    middleCodeList.addCode(new ArrayDefCode(var, this.initVarVector));
-                } else if (var.dim == 0) {
-                    middleCodeList.addCode(new VarDefCode(var, returnVar));
-                }
+            else if (var.dim == 0) {
+                middleCodeList.addCode(new VarDefCode(var, new Var(returnVar.value)));
             }
         }
         else{
@@ -153,7 +139,6 @@ public class VarDef extends SynUnit {
                 middleCodeList.addCode(new VarDefCode(var));
             }
         }
-
     }
 
 

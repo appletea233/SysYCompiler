@@ -20,16 +20,13 @@ public class PrimaryExp extends SynUnit {
         if (Objects.equals(sym, LPARENT)){
             checkSymNow(LPARENT);
             checkSynUnit("Exp");
-//            this->dim = ((Exp*)(children.back()))->dim;
             checkSymNow(RPARENT);
         }
         else if (Objects.equals(sym, IDENFR)){
             checkSynUnit("LVal");
-//            this->dim = ((LVal*)(children.back()))->dim;
         }
         else if (Objects.equals(sym, INTCON)){
             checkSynUnit("Number");
-//            this->dim = ((Number*)(children.back()))->dim;
         }
         else{
             System.out.println("primary_exp error");

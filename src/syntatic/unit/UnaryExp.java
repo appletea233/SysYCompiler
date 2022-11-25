@@ -4,6 +4,7 @@ import base.BaseUnit;
 import base.Func;
 import base.Var;
 import base.VarTable;
+import middleCode.unit.ConditionExpCode;
 import middleCode.unit.ExpCode;
 import middleCode.unit.FuncCallCode;
 import middleCode.unit.PushCode;
@@ -194,11 +195,13 @@ public class UnaryExp extends SynUnit {
             else if (isChildMatch(UNARYOP)){
                 genChildMiddleCode(UNARYOP);
                 int opValue = ((UnaryOp) childUnit).opValue;
-                if (opValue == 0)
-                    System.out.println("getmiddlecode Unary Op is not expected as !");
-
                 genChildMiddleCode(UNARYEXP);
-                if (opValue == 1){
+
+                if (opValue == 0){
+                    returnVar = VarTable.getTmpVar();
+                    middleCodeList.addCode(new ConditionExpCode("beq", this.returnVar, childUnit.returnVar, new Var(0)));
+                }
+                else if (opValue == 1){
                     returnVar = childUnit.returnVar;
                 }
                 else if (opValue == -1) {

@@ -40,14 +40,11 @@ public class Exp extends SynUnit {
         System.out.println(this.isConst);
 
         reset();
-//        var = parent.var;
-//        if (var!=null){
-//            if (var.dim == 0){
-                genChildMiddleCode(ADDEXP);
-                returnVar = childUnit.returnVar;
-                System.out.println("Exp ReturnExp "+returnVar);
-//            }
-//        }
+
+        genChildMiddleCode(ADDEXP);
+        returnVar = childUnit.returnVar;
+        System.out.println("Exp ReturnExp "+returnVar);
+
     }
 
 }

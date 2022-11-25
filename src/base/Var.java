@@ -1,7 +1,5 @@
 package base;
 
-import com.sun.glass.ui.Size;
-
 import java.util.Objects;
 import java.util.Vector;
 
@@ -23,6 +21,7 @@ public class Var {
     public boolean isGlobal = false;
     public int length = 0;
     public int addr = 0;    // 地址偏移量
+    public int array_addr = 0;    // 地址偏移量
     public Var origin;
 
     public Vector<Integer> usedLine = new Vector<>();

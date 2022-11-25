@@ -35,29 +35,22 @@ public class VarDefCode extends MiddleCode {
 
     public void constructMemoryStageOne(){
         if (currentFunc == null){
-            if (var.dim == 0) {
-                mipsCodeManger.addWord(var.name, var.value);
-                var.isGlobal = true;
-                System.out.println(var);
-            }
+            mipsCodeManger.addWord(var.name, var.value);
+            var.isGlobal = true;
+
         }
         else{
-            if (var.dim == 0){
-                if (! var.isTmp){
-                    var.addr = currentFunc.localMem;
-                    currentFunc.localMem += 4;
-                    System.out.println(var);
-                }
+            if (! var.isTmp){
+                var.addr = currentFunc.localMem;
+                currentFunc.localMem += 4;
             }
         }
     }
 
     public void constructMemoryStageTwo(){
         if (currentFunc != null) {
-            if (var.dim == 0){
-                if (! var.isTmp){
-                    var.addr -= currentFunc.totalMem;
-                }
+            if (! var.isTmp){
+                var.addr -= currentFunc.totalMem;
             }
         }
     }

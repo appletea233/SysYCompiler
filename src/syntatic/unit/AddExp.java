@@ -68,8 +68,8 @@ public class AddExp extends SynUnit{
     }
 
     public void genMiddleCode() {
+        reset();
         if (!(isConst || isGlobal)) {
-            System.out.println("22222");
             update();
 
             Var var1;

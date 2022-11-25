@@ -14,4 +14,8 @@ public class LabelCode extends MiddleCode {
     public String toString() {
         return "\n"+ name + ':';
     }
+
+    public void genMipsCode(){
+        mipsCodeManger.addLabel(name);
+    }
 }

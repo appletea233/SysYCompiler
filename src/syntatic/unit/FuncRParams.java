@@ -2,6 +2,7 @@ package syntatic.unit;
 
 import base.BaseUnit;
 import base.Var;
+import lexical.unit.IntCon;
 import syntatic.SynUnit;
 
 import java.util.Objects;
@@ -58,5 +59,6 @@ public class FuncRParams extends SynUnit {
             genChildMiddleCode(EXP);
             inVarList.add(childUnit.returnVar);
         }
+        System.out.println("invar"+inVarList);
     }
 }

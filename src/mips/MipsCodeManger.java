@@ -64,8 +64,8 @@ public class MipsCodeManger {
         addText(String.format("%s $%s, $%s, %d", "addi", returnReg, reg1, value));
     }
 
-    public void addLw(String reg,String label, int addr){
-        addText(String.format("lw $%s, %d($%s)", reg, addr, label));
+    public void addLw(String reg,String reg_label, int addr){
+        addText(String.format("lw $%s, %d($%s)", reg, addr, reg_label));
     }
 
     public void addLwLabel(String reg,String label, int addr){
@@ -111,6 +111,18 @@ public class MipsCodeManger {
 
     public void addLa(String reg, String label) {
         addText(String.format("la $%s, %s", reg, label));
+    }
+
+    public void addSll(String reg, String reg1, int value) {
+        addText(String.format("sll $%s, $%s, %d", reg, reg1, value));
+    }
+
+    public void addCondBranch(String op, String reg1, String reg2, String label){
+        addText(String.format("%s $%s, $%s, %s", op, reg1, reg2, label));
+    }
+
+    public void addCondBranch(String op, String reg1, int number, String label){
+        addText(String.format("%s $%s, %d, %s", op, reg1, number, label));
     }
 
     public void parse(String outfile) throws IOException {

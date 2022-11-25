@@ -3,6 +3,7 @@ package syntatic.unit;
 import base.BaseUnit;
 import base.Var;
 import base.VarTable;
+import middleCode.unit.ArrayGetValueCode;
 import middleCode.unit.ExpCode;
 import syntatic.SynUnit;
 
@@ -17,6 +18,7 @@ public class LVal extends SynUnit {
     int line = 0;
     Vector<Var> varVector = new Vector<>();
     String name;
+    Vector<Integer> indexList = new Vector<>();
 
     public LVal(BaseUnit baseUnit) {
         super(baseUnit, "LVal");
@@ -65,29 +67,78 @@ public class LVal extends SynUnit {
         reset();
         if (isConst || isGlobal) {
             checkChild(IDENFR);
-            value = var.value;
-            System.out.println(LVAL+": "+var);
-            // 常量函数赋值
-            // TODO 数组常量的存取
+            this.value = var.value;
             while(isChildMatch(LBRACK)){
                 checkChild(LBRACK);
-                createChildTable(EXP);
+                getChildValue(EXP);
+                indexList.add(childUnit.value);
                 checkChild(RBRACK);
             }
+            if (var.dim != 0) {
+                int index = 0;
+                for (int i = 0; i < indexList.size() - 1; i++) {
+                    index += indexList.get(i) * var.arrayDim.get(i + 1);
+                }
+                index += indexList.get(indexList.size() - 1);
+                this.value = var.arrayValue.get(index);
+            }
+            System.out.println(LVAL+" Value: "+value);
         }
     }
 
     public void genMiddleCode(){
+        reset();
+        checkChild(IDENFR);
         if (dim == 0){
             if (var.dim == 0){
                 returnVar = var;
             }
             else{
-                returnVar = VarTable.getTmpVar();
+                Vector<Var> indexVarVector = new Vector<>();
+                while(isChildMatch(LBRACK)){
+                    checkChild(LBRACK);
+                    genChildMiddleCode(EXP);
+                    indexVarVector.add(childUnit.returnVar);
+                    checkChild(RBRACK);
+                }
+                if (indexVarVector.size() == 1){
+                    returnVar = VarTable.getTmpVar();
+                    middleCodeList.addCode(new ArrayGetValueCode(returnVar,var, indexVarVector.get(0)));
+                }
+                else if (indexVarVector.size() == 2){
+                    Var indexVar1 = VarTable.getTmpVar();
+                    middleCodeList.addCode(new ExpCode(indexVar1, indexVarVector.get(0), "*", new Var(var.arrayDim.get(1))));
+                    Var indexVar2 = VarTable.getTmpVar();
+                    middleCodeList.addCode(new ExpCode(indexVar2, indexVar1, "+", indexVarVector.get(1)));
+
+                    returnVar = VarTable.getTmpVar();
+                    System.out.println(returnVar);
+                    middleCodeList.addCode(new ArrayGetValueCode(returnVar, var, indexVar2));
+                }
+
             }
         }
         else {
-
+            // only when func call
+            if (dim == var.dim){
+                returnVar = var;
+            }
+            else{
+                Vector<Var> indexVarVector = new Vector<>();
+                while(isChildMatch(LBRACK)){
+                    checkChild(LBRACK);
+                    genChildMiddleCode(EXP);
+                    indexVarVector.add(childUnit.returnVar);
+                    checkChild(RBRACK);
+                }
+                if (indexVarVector.size() == 1){
+                    returnVar = VarTable.getTmpVar();
+                    middleCodeList.addCode(new ExpCode(returnVar, var, "+", indexVarVector.get(0)));
+                }
+                else{
+                    System.out.println("LVal error...");
+                }
+            }
         }
     }
 }

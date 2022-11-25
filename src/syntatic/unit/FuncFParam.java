@@ -83,14 +83,16 @@ public class FuncFParam extends SynUnit {
 
         genChildMiddleCode(BTYPE);
         checkChild(IDENFR);
-
-        middleCodeList.addCode(new FuncParaCode(var));
+        if (dim == 0)
+            middleCodeList.addCode(new FuncParaCode(var));
+        else{
+            middleCodeList.addCode(new FuncParaCode(var));
+        }
 
         if (isChildMatch(LBRACK)) {
             checkChild(LBRACK);
             checkChild(RBRACK);
             while (isChildMatch(LBRACK)) {
-                dim++;
                 checkChild(LBRACK);
                 genChildMiddleCode(CONSTEXP);
                 checkChild(RBRACK);

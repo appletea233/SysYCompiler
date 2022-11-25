@@ -4,11 +4,9 @@ import base.BaseUnit;
 import base.Func;
 import base.Var;
 import base.VarTable;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import middleCode.unit.ReturnCode;
 import syntatic.SynUnit;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.Objects;
 
 import static base.Type.*;
@@ -76,16 +74,13 @@ public class Block extends SynUnit {
             if (! res)
                 errorList.addError(children.lastElement().line, 'g');
         }
-
-
-
     }
 
     public void genMiddleCode(){
         super.genMiddleCode();
 
 
-        System.out.println("---------------" + isFunc + " " + isVoid);
+        System.out.println("this block is func or void: " + isFunc + " " + isVoid);
         if (isFunc && isVoid) {
             boolean res = false;
             BaseUnit unit = children.get(children.size() - 2);
@@ -96,7 +91,6 @@ public class Block extends SynUnit {
                         res = true;
                 }
             }
-            System.out.println("------------++++++++++++");
             if (!res){
                 middleCodeList.addCode(new ReturnCode(null));
             }

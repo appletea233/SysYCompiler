@@ -6,37 +6,48 @@ import middleCode.MiddleCode;
 import java.util.Vector;
 
 public class ArrayDefCode extends MiddleCode {
-    Var var;
-    Vector<Var> initVarVector;
+    Var array;
+    public Vector<Integer> dimList = new Vector<>();
+    public Vector<Integer> valueList = new Vector<>();
     boolean isInit = false;
 
     public ArrayDefCode(Var var) {
-        this.var = var;
+        this.array = var;
+        this.dimList = var.arrayDim;
     }
-
-    public ArrayDefCode(Var var, Vector<Var> initVarVector) {
-        this.var = var;
-        this.initVarVector = initVarVector;
+    public ArrayDefCode(Var var, Vector<Integer> valueList) {
+        this.array = var;
+        this.dimList = var.arrayDim;
+        this.valueList = valueList;
         this.isInit = true;
     }
 
     @Override
     public String toString() {
         String buf = "";
-        String dim = "";
-        for (int i = 0; i < var.dim; i++) {
-            dim += " " + var.arrayDim.get(i);
+        for (int dim: dimList) {
+            buf += "[" + dim + "]";
         }
-        if (isInit) {
-            for (Var var : initVarVector) {
-                if (var.isConst)
-                    buf += var.value + " ";
-                else
-                    buf += var.name + " ";
-            }
-            return "array int " + var.name + dim + " = " + buf;
+       return "arr int "+ array.name + buf;
+    }
+
+    public void constructMemoryStageOne(){
+        if (currentFunc == null){
+            mipsCodeManger.addSpace(array.name, array.getArraySize());
+            array.isGlobal = true;
         }
-       else
-           return "array int " + var.name + dim;
+        else{
+            array.addr = currentFunc.localMem;
+            currentFunc.localMem += array.getArraySize();
+        }
+    }
+
+    public void constructMemoryStageTwo(){
+        if (currentFunc != null) {
+            array.addr -= currentFunc.totalMem;
+        }
+    }
+
+    public void genMipsCode(){
     }
 }

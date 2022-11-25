@@ -53,12 +53,14 @@ public class ConstInitVal extends SynUnit {
             if (isChildMatch(RBRACE))
                 checkChild(RBRACE);
             else{
-                createChildTable(CONSTINITVAL);
+                childUnit = getChildNow();
                 childUnit.var = var;
+                createChildTable(CONSTINITVAL);
                 while(isChildMatch(COMMA)){
                     checkChild(COMMA);
-                    createChildTable(CONSTINITVAL);
+                    childUnit = getChildNow();
                     childUnit.var = var;
+                    createChildTable(CONSTINITVAL);
                 }
                 checkChild(RBRACE);
             }
@@ -73,6 +75,8 @@ public class ConstInitVal extends SynUnit {
         if (isChildMatch(CONSTEXP)){
             getChildValue(CONSTEXP);
             value = childUnit.value;
+            System.out.println(value);
+            System.out.println(var);
             this.var.arrayValue.add(value);
         }
         else if (isChildMatch(LBRACE)){

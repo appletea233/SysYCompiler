@@ -253,7 +253,7 @@ public class SynUnit extends BaseUnit {
         }
         else{
             if (childIdx>=children.size())
-                System.out.println("children out of idx");
+                System.out.println("checkChild children out of idx");
             else
                 System.out.println("checkChild unmatched "+correct+ " "+getChildNow().line + " "+getChildNow().name);
             return false;

@@ -3,8 +3,10 @@ package syntatic.unit;
 import base.BaseUnit;
 import base.Var;
 import lexical.unit.StrCon;
+import middleCode.LabelManager;
 import middleCode.MiddleCodeList;
 import middleCode.unit.ExpCode;
+import middleCode.unit.LabelCode;
 import middleCode.unit.ReturnCode;
 import syntatic.SynUnit;
 
@@ -17,6 +19,9 @@ public class Stmt extends SynUnit {
     public boolean isVoid = false;
     public boolean isFunc = false;
     public boolean isLoop = false;
+
+    public String label1 = "";
+    public String label2 = "";
 
     public Stmt(BaseUnit parent) {
         super(parent, "Stmt");
@@ -296,18 +301,6 @@ public class Stmt extends SynUnit {
                 genChildMiddleCode(EXP);
                 var2 = childUnit.returnVar;
                 middleCodeList.addCode(new ExpCode(var1, var2));
-//                if (MiddleCodeList.currentCode!=null &&  MiddleCodeList.currentCode.cls.equals("ExpCode")){
-//                    ExpCode expCode = (ExpCode)(MiddleCodeList.currentCode);
-//                    if (expCode.varReturn.isTmp){
-//                        expCode.varReturn = var1;
-//                    }
-//                    else{
-//                        middleCodeList.addCode(new ExpCode(var1, var2));
-//                    }
-//                }
-//                else{
-//                    middleCodeList.addCode(new ExpCode(var1, var2));
-//                }
             }
             else if (isChildMatch(GETINTTK)){
                 var2 = new Var("GETINT");
@@ -342,22 +335,36 @@ public class Stmt extends SynUnit {
             genChildMiddleCode(EXP);
         }
         else if (isChildMatch(IFTK)){
+
+            String label1 = LabelManager.getLabel();        // cond == 1
+            String label2 = LabelManager.getLabel();        // cond == 0
             checkChild(IFTK);
             checkChild(LPARENT);
-            genChildMiddleCode(COND);
+            Cond cond = (Cond)getChildNow();
+            cond.genMiddleCode(label1, label2);
+            childIdx++;
             checkChild(RPARENT);
+            middleCodeList.addCode(new LabelCode(label1));
             genChildMiddleCode(STMT);
+            System.out.println(returnVar);
+            middleCodeList.addCode(new LabelCode(label2));
             while(isChildMatch(ELSETK)){
                 checkChild(ELSETK);
                 genChildMiddleCode(STMT);
             }
         }
         else if (isChildMatch(WHILETK)){
+            String label1 = LabelManager.getLabel();        // cond == 1
+            String label2 = LabelManager.getLabel();        // cond == 0
             checkChild(WHILETK);
             checkChild(LPARENT);
-            genChildMiddleCode(COND);
+            Cond cond = (Cond)getChildNow();
+            cond.genMiddleCode(label1, label2);
+            childIdx++;
             checkChild(RPARENT);
+            middleCodeList.addCode(new LabelCode(label1));
             genChildMiddleCode(STMT);
+            middleCodeList.addCode(new LabelCode(label2));
         }
         else if (isChildMatch(BLOCK)){
             genChildMiddleCode(BLOCK);
@@ -368,7 +375,6 @@ public class Stmt extends SynUnit {
         else{
             System.out.println("Stmt is not defined with "+getChildNow().name);
         }
-
     }
 
 
